@@ -59,12 +59,17 @@ public class Board : MonoBehaviour
         SpawnPiece();
     }
 
+    /// <summary>
+    /// 这是preview里显示的data
+    /// </summary>
+    private TetrominoData data;
+    
     private void InitPreview()
     {
         //得到一个随机数，然后把随机数给索引
         int random = Random.Range(0, this.tetrominoes.Length);
         //拿到一个随机形状
-        TetrominoData data = this.tetrominoes[random];
+        this.data = this.tetrominoes[random];
 
         preview.Init(data);
     }
@@ -82,7 +87,7 @@ public class Board : MonoBehaviour
         // //什么意思
         // TetrominoData data = this.tetrominoes[random];
 
-        TetrominoData data = preview.data;
+        TetrominoData data = this.data;
 
         this.activePiece.Initialize(this, spawnPosition, data);
         if (IsValidPosition(this.activePiece, this.spawnPosition))
