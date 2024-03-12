@@ -1,11 +1,6 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
+using script;
 using UnityEngine;
-using UnityEngine.Animations;
 using UnityEngine.Tilemaps;
-using Random = System.Random;
 
 //board类控制整体情况
 public class Board : MonoBehaviour
@@ -19,7 +14,7 @@ public class Board : MonoBehaviour
     //Vector2Int 也可以用于表示任何需要一对整数的场景
     public Vector2Int boardSize = new Vector2Int(10, 20);
     public GameObject GameoverUI;
-    
+
     /// <summary>
     /// 第一步：声明一个变量用来声明游戏是否结束 
     /// </summary>
@@ -31,17 +26,18 @@ public class Board : MonoBehaviour
     //这是一个只读属性，只能get
     public RectInt Bounds
     {
-        
         get
         {
             //求出矩形左下角的值，再以（10，20）作为矩形的尺寸，这样矩形正好覆盖整个区域
             Vector2Int position = new Vector2Int(-this.boardSize.x / 2, -this.boardSize.y / 2);
             //只读属性，创建并返回返回“Rectint"类型的值，表示游戏板的边界
             //RectInt 是unity自带的结构体，用于定义一个矩形的整数位置和大小。一个参数是矩形的起始位置，第二个参数决定其尺寸
-            
+
             return new RectInt(position, this.boardSize);
         }
     }
+
+    public Preview preview;
 
     private void Awake()
     {
@@ -59,7 +55,18 @@ public class Board : MonoBehaviour
 
     public void Start()
     {
+        InitPreview();
         SpawnPiece();
+    }
+
+    private void InitPreview()
+    {
+        //得到一个随机数，然后把随机数给索引
+        int random = Random.Range(0, this.tetrominoes.Length);
+        //什么意思
+        TetrominoData data = this.tetrominoes[random];
+
+        preview.Init(data);
     }
 
     public void SpawnPiece()
@@ -69,19 +76,19 @@ public class Board : MonoBehaviour
         {
             return;
         }
-        
+
         //得到一个随机数，然后把随机数给索引
-        int random = UnityEngine.Random.Range(0, this.tetrominoes.Length);
+        int random = Random.Range(0, this.tetrominoes.Length);
         //什么意思
         TetrominoData data = this.tetrominoes[random];
         this.activePiece.Initialize(this, spawnPosition, data);
         if (IsValidPosition(this.activePiece, this.spawnPosition))
         {
             Set(this.activePiece);
-        }else
+        }
+        else
         {
             GameOver();
-            
         }
     }
 
@@ -91,7 +98,7 @@ public class Board : MonoBehaviour
         isGameOver = true;
 
         GameoverUI.SetActive(true);
-        Invoke("ClearAllTiles",3);
+        Invoke("ClearAllTiles", 3);
         //...
     }
 
@@ -99,13 +106,14 @@ public class Board : MonoBehaviour
     {
         GameoverUI.SetActive(false);
         this.tilemap.ClearAllTiles();
-        
+
         // 第4步： 过三秒，清空界面，重新开始
         // 将 isGameOver 设置成 false （继续游戏）
         isGameOver = false;
         // 重新开始生成 Piece
         SpawnPiece();
     }
+
     /// <summary>
     /// 将俄罗斯方块形状的位置在tilemap上进行可视化表现。
     /// Piece对象的每个单元格，计算该单元格在Tilemap中的实际位置，并在该位置上设置相应的瓦片，以此来展示形状。
@@ -191,17 +199,18 @@ public class Board : MonoBehaviour
 
         return true;
     }
-/// <summary>
-/// 这里传进来的row是检测成功  if (IsLineFull(row))的row 
-/// </summary>
-/// <param name="row"></param>
+
+    /// <summary>
+    /// 这里传进来的row是检测成功  if (IsLineFull(row))的row 
+    /// </summary>
+    /// <param name="row"></param>
     private void LineClear(int row)
     {
         RectInt bounds = this.Bounds;
         for (int col = bounds.xMin; col < bounds.xMax; col++)
         {
             Vector3Int position = new Vector3Int(col, row, 0);
-            this.tilemap.SetTile(position,null);
+            this.tilemap.SetTile(position, null);
         }
 
         while (row < bounds.yMax)
@@ -209,12 +218,12 @@ public class Board : MonoBehaviour
             for (int col = bounds.xMin; col < bounds.xMax; col++)
             {
                 //获取上方行的位置
-                Vector3Int position = new Vector3Int(col, row+1, 0);
+                Vector3Int position = new Vector3Int(col, row + 1, 0);
                 //TileBase，用于表示 2D 地图瓦片（tile）的基类。
                 TileBase above = this.tilemap.GetTile(position);
                 position = new Vector3Int(col, row, 0);
                 //用上面相同的图块在当前位置创建图块
-                this.tilemap.SetTile(position,above);
+                this.tilemap.SetTile(position, above);
             }
             //消除行的每一行都要往下移动
             row++;
