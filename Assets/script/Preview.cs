@@ -7,11 +7,11 @@ namespace script
     {
         public Text previewText;
 
-        // private TetrominoData mData;
+        public TetrominoData data;
 
         public void Init(TetrominoData data)
         {
-            // mData = data;
+            this.data = data;
             this.previewText.text = data.tetromino.ToString();
         }
     }

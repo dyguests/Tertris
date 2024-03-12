@@ -77,10 +77,13 @@ public class Board : MonoBehaviour
             return;
         }
 
-        //得到一个随机数，然后把随机数给索引
-        int random = Random.Range(0, this.tetrominoes.Length);
-        //什么意思
-        TetrominoData data = this.tetrominoes[random];
+        // //得到一个随机数，然后把随机数给索引
+        // int random = Random.Range(0, this.tetrominoes.Length);
+        // //什么意思
+        // TetrominoData data = this.tetrominoes[random];
+
+        TetrominoData data = preview.data;
+
         this.activePiece.Initialize(this, spawnPosition, data);
         if (IsValidPosition(this.activePiece, this.spawnPosition))
         {
