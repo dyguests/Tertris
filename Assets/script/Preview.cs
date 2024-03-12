@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,10 +11,14 @@ namespace script
 
         // public TetrominoData data;
 
-        public void Init(TetrominoData data)
+        public void Init(List<TetrominoData> datas)
         {
             // this.data = data;
-            this.previewText.text = data.tetromino.ToString();
+
+            var allPreviewText = string.Join("\n",datas.Select(data => data.tetromino.ToString()));
+
+            // this.previewText.text = data.tetromino.ToString();
+            this.previewText.text = allPreviewText;
         }
     }
 }

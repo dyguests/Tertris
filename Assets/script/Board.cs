@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using script;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -62,16 +63,20 @@ public class Board : MonoBehaviour
     /// <summary>
     /// 这是preview里显示的data
     /// </summary>
-    private TetrominoData data;
-    
+    private List<TetrominoData> datas = new List<TetrominoData>();
+
     private void InitPreview()
     {
-        //得到一个随机数，然后把随机数给索引
-        int random = Random.Range(0, this.tetrominoes.Length);
-        //拿到一个随机形状
-        this.data = this.tetrominoes[random];
+        for (int i = 0; i < 3; i++)
+        {
+            //得到一个随机数，然后把随机数给索引
+            int random = Random.Range(0, this.tetrominoes.Length);
+            //拿到一个随机形状
+            // this.data = this.tetrominoes[random];
+            datas.Add(this.tetrominoes[random]);
+        }
 
-        preview.Init(data);
+        preview.Init(datas);
     }
 
     public void SpawnPiece()
@@ -87,7 +92,7 @@ public class Board : MonoBehaviour
         // //什么意思
         // TetrominoData data = this.tetrominoes[random];
 
-        TetrominoData data = this.data;
+        TetrominoData data = this.datas[0];
 
         this.activePiece.Initialize(this, spawnPosition, data);
         if (IsValidPosition(this.activePiece, this.spawnPosition))
