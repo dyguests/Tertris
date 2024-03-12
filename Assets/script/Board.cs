@@ -63,7 +63,7 @@ public class Board : MonoBehaviour
     {
         //得到一个随机数，然后把随机数给索引
         int random = Random.Range(0, this.tetrominoes.Length);
-        //什么意思
+        //拿到一个随机形状
         TetrominoData data = this.tetrominoes[random];
 
         preview.Init(data);
